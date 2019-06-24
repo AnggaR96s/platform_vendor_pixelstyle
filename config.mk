@@ -17,14 +17,13 @@
 PRODUCT_PACKAGES += \
     SoundPickerPrebuilt \
     WallpaperPickerGooglePrebuilt \
-    MarkupGoogle
-
-ifeq ($(TARGET_GAPPS_ARCH),arm64)
-PRODUCT_PACKAGES += \
-    MatchmakerPrebuilt
-endif
-
-TARGET_MINIMAL_APPS ?= false
+    MarkupGoogle \
+    MatchmakerPrebuilt \
+    GContacts \
+    GCalculator \
+    GDeskClock \
+    GDialer \
+    GMessaging
 
 # build.prop entrys
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -34,20 +33,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     vendor/pixelstyle/etc/sysconfig/pixel.xml:system/etc/sysconfig/pixel.xml
 
-# Set Pixel blue light theme on Gboard
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.com.google.ime.theme_id=5
-
-# Markup libs
-PRODUCT_COPY_FILES += \
-    vendor/pixelstyle/lib/libsketchology_native.so:system/lib/libsketchology_native.so
-
-ifeq ($(TARGET_GAPPS_ARCH),arm64)
+# Markup libs for arm64 only
 PRODUCT_COPY_FILES += \
     vendor/pixelstyle/lib64/libsketchology_native.so:system/lib64/libsketchology_native.so
-endif
 
 # Include package overlays
 PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += vendor/pixelstyle/overlay
 DEVICE_PACKAGE_OVERLAYS += \
     vendor/pixelstyle/overlay/common/
+
+# Fix Dialer
+PRODUCT_COPY_FILES +=  \
+    vendor/pixelstyle/overlay/common/sysconfig/dialer_experience.xml:system/etc/sysconfig/dialer_experience.xml
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.opa.eligible_device=true
